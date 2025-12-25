@@ -1,17 +1,13 @@
 import React from 'react'
+import { LOGO_URL } from '../assets/Img_URL';
 
 const Header = () => {
   return (
-
-    <div 
-    className='absolute z-1 bg-linear-to-b from-black px-8 py-6  w-full'>
-      <img
-        className="w-40"
-        src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production_2025-12-03/consent/87b6a5c0-0104-4e96-a291-092c11350111/019ae4b5-d8fb-7693-90ba-7a61d24a8837/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-        alt="logo"
-      />
+    <div className=" absolute transform -translate-x-1/2 -translate-y-1/2 bg-linear-to-b from-black top-1/2 left-1/2 z-1 flex justify-center items-center px-8 py-6 h-screen  w-full">
+      <img className="" src={LOGO_URL} alt="logo" />
     </div>
   );
 }
 
 export default Header
+// bg-linear-to-b from-black
