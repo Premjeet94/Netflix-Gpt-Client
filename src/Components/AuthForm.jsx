@@ -1,28 +1,34 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { checkValidData } from "../Utils/validate";
 
 const AuthForm = () => {
-  const [Form, setForm] = useState(true)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const handleClick= (e)=>{
-    e.preventDefault()
-  }
-  const handleToggle = ()=>{
-    setForm(!Form)
-  }
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isSignIn && !name.trim()) {
+      setError("Name is required");
+      return;
+    }
+    const validationError = checkValidData(email, password);
+    setError(validationError || "");
+  };
+  const handleToggle = () => {
+    setIsSignIn(!isSignIn);
+  };
   return (
-    <div
-      className={`absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 bg-black/80 z-10 text-white rounded px-20 py-15 flex flex-col  w-150 ${
-        Form ? "h-200" : "h-180"
-      }`}
-    >
-      <h2 className="text-5xl font-bold">{Form ? "SignIn" : "SignUp"}</h2>
-      <form className="flex flex-col items-center w-full gap-2">
-        {!Form && (
+    <div className="w-full max-w-md bg-black/80 text-white rounded-lg p-6 sm:p-10">
+      <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+        {isSignIn ? "SignIn" : "SignUp"}
+      </h2>
+      <form className="flex flex-col gap-4">
+        {!isSignIn && (
           <input
-            className="p-4 text-xl  mt-12 w-full h-14 bg-gray-800/50 outline-none border rounded"
+            className="p-3 bg-gray-800 rounded outline-none"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -32,19 +38,16 @@ const AuthForm = () => {
           />
         )}
         <input
-          className={`p-4 text-xl  ${
-            !Form ? "mt-2" : "mt-12"
-          } w-full h-14 bg-gray-800/50 outline-none border rounded`}
+          className="p-3 bg-gray-800 rounded outline-none"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
-          type="text"
+          type="email"
           placeholder="Email"
         />
         <input
-          className="p-4 text-xl mt-2
-           w-full h-14 bg-gray-800/50 outline-none border rounded"
+          className="p-3 bg-gray-800 rounded outline-none"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
@@ -52,19 +55,30 @@ const AuthForm = () => {
           type="password"
           placeholder="Passsword"
         />
-        <button className="p-4 cursor-pointer text-xl mt-8 w-full h-14 bg-red-700 outline-none font-bold rounded"
-        onClick={handleClick}>
-          {Form ? "SignIn" : "SignUp"}
+
+        {error !== null && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button
+          type="submit"
+          className="bg-red-700 hover:bg-red-800 transition rounded p-3 font-bold"
+          onSubmit={handleSubmit}
+        >
+          {isSignIn ? "SignIn" : "SignUp"}
         </button>
-        {Form && <h3 className="text-xl font-medium mt-2 mb-2">OR</h3>}
-        {Form && (
-          <button className="p-4 text-xl cursor-pointer w-full h-14 bg-gray-500/50 outline-none rounded font-bold"
-          onClick={handleClick}>
+        <div>
+          {isSignIn && <h3 className="text-center text-gray-400">OR</h3>}
+        </div>
+        {isSignIn && (
+          <button
+            type="button"
+            className="bg-gray-700 hover:bg-gray-600 transition rounded p-3"
+            onSubmit={handleSubmit}
+          >
             Use a Sign-In Code
           </button>
         )}
-        {Form && (
-          <Link className="underline text-2xl  mb-2 mt-2">
+        {isSignIn && (
+          <Link className="text-sm underline text-center">
             Forgot Password?
           </Link>
         )}
@@ -72,11 +86,11 @@ const AuthForm = () => {
           <input className="h-10 cursor-pointer w-6" type="checkbox" />
           <span>Remember me</span>
         </div>
-        <div className="w-full mt-2 mb-6 text-xl font-medium">
+        <div className="text-sm text-gray-400">
           <span className="text-gray-500">
-            {Form ? "NewToNetflix?" : "NetflixMember?"}
+            {isSignIn ? "NewToNetflix?" : "NetflixMember?"}
             <Link className="hover:underline text-white" onClick={handleToggle}>
-              {Form ? "SignUpNow" : "SignInNow"}
+              {isSignIn ? "SignUpNow" : "SignInNow"}
             </Link>
           </span>
         </div>
@@ -86,6 +100,6 @@ const AuthForm = () => {
       </form>
     </div>
   );
-}
+};
 
-export default AuthForm
+export default AuthForm;

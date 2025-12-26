@@ -3,8 +3,12 @@ import { LOGO_URL } from '../assets/Img_URL';
 
 const Header = () => {
   return (
-    <div className=" absolute transform -translate-x-1/2 -translate-y-1/2 bg-linear-to-b from-black top-1/2 left-1/2 z-1 flex justify-center items-center px-8 py-6 h-screen  w-full">
-      <img className="" src={LOGO_URL} alt="logo" />
+    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+      <img
+        className="w-[90%] sm:w-[70%] md:w-[60%]"
+        src={LOGO_URL}
+        alt="logo"
+      />
     </div>
   );
 }
