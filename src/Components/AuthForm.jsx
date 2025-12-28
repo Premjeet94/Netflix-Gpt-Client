@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { checkValidData } from "../Utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../Utils/firebase";
 
 const AuthForm = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -16,6 +21,38 @@ const AuthForm = () => {
     }
     const validationError = checkValidData(email, password);
     setError(validationError || "");
+    if (validationError) return;
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setError(
+            "Error Code - 404/Registration Failed" +
+              " " +
+              errorCode +
+              " " +
+              errorMessage
+          );
+        });
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setError(
+            "Register Before SignIn" + " " + errorCode + " " + errorMessage
+          );
+        });
+    }
   };
   const handleToggle = () => {
     setIsSignIn(!isSignIn);
@@ -56,12 +93,14 @@ const AuthForm = () => {
           placeholder="Passsword"
         />
 
-        {error !== null && <p className="text-red-500 text-sm">{error}</p>}
+        <div className="h-6">
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
 
         <button
-          type="submit"
+          type="button"
           className="bg-red-700 hover:bg-red-800 transition rounded p-3 font-bold"
-          onSubmit={handleSubmit}
+          onClick={handleSubmit}
         >
           {isSignIn ? "SignIn" : "SignUp"}
         </button>
@@ -82,8 +121,8 @@ const AuthForm = () => {
             Forgot Password?
           </Link>
         )}
-        <div className="flex gap-3 text-2xl items-center w-full">
-          <input className="h-10 cursor-pointer w-6" type="checkbox" />
+        <div className="flex gap-2 text-lg items-center w-full">
+          <input className="cursor-pointer w-6" type="checkbox" />
           <span>Remember me</span>
         </div>
         <div className="text-sm text-gray-400">
