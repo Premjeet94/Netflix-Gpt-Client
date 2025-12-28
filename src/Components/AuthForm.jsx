@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { checkValidData } from "../Utils/validate";
 import {
   createUserWithEmailAndPassword,
@@ -8,6 +8,7 @@ import {
 import { auth } from "../Utils/firebase";
 
 const AuthForm = () => {
+  const navigate = useNavigate();
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +28,7 @@ const AuthForm = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user);
+          navigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -44,6 +46,7 @@ const AuthForm = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user);
+          navigate('/browse')
         })
         .catch((error) => {
           const errorCode = error.code;
